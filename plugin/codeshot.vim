@@ -8,13 +8,19 @@ endif
 let loaded_codeshot = 1
 
 function s:Codeshot() range
+  let pipeline = filter([s:Pygmentize(), s:Trim(), s:CopyToClipboard()], 'len(v:val)')
+  let command = join(pipeline, ' | ')
+
   let code = join(getline(a:firstline, a:lastline), "\n")
-  let command = 'pygmentize -O full,' . s:Options() . ' -f png ' . s:FiletypeOption() . s:TrimPipeline() . 'xclip -selection clipboard -t image/png'
 
   echo system(command, code)
 endfunction
 
-function s:Options()
+function s:Pygmentize()
+  return 'pygmentize -f png ' . s:OutputOptions() . s:LanguageOption()
+endfunction
+
+function s:OutputOptions()
   let style = get(g:, 'CodeshotStyle', 'trac')
   let font_size = get(g:, 'CodeshotFontSize', 32)
   let line_numbers = get(g:, 'CodeshotShowLineNumbers', 0)
@@ -25,27 +31,30 @@ function s:Options()
     let line_numbers='False'
   endif
 
-  return 'style=' . style .',font_size=' . font_size . ',line_numbers=' . line_numbers
+  return '-O full,style=' . style .',font_size=' . font_size . ',line_numbers=' . line_numbers
 endfunction
 
-function s:TrimPipeline()
-  let trim = get(g:, 'CodeshotTrim', 1)
-  let trim_exists = executable('convert')
-
-  if trim && trim_exists
-    return ' | convert png:- -trim png:- | '
-  endif
-
-  return ' | '
-
-endfunction
-
-function s:FiletypeOption()
+function s:LanguageOption()
   if &filetype == ''
     return ''
   endif
 
   return ' -l ' . &filetype
+endfunction
+
+function s:Trim()
+  let trim = get(g:, 'CodeshotTrim', 1)
+  let trim_exists = executable('convert')
+
+  if trim && trim_exists
+    return 'convert png:- -trim png:-'
+  endif
+
+  return ''
+endfunction
+
+function s:CopyToClipboard()
+  return  'xclip -selection clipboard -t image/png'
 endfunction
 
 command! -range=% -nargs=0 Codeshot :<line1>,<line2>call s:Codeshot()
