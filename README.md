@@ -34,7 +34,9 @@ You can control the appearance of the code using the following options:
     demo] for a list of available styles. (default `trac`)
 -   `g:CodeshotFontSize`: Font size. (default `32`)
 -   `g:CodeshotShowLineNumbers`: Show line numbers. (default `0` for no line
-    numbers, 1 will show them)
+    numbers, `1` will show them)
+-   `g:CodeshotTrim`: Run ImageMagick's `convert` to trim empty space around
+    the image. If `convert` is not available it will not run (default `1`)
 
   [pygments]: http://pygments.org/
   [Demo gif]: codeshot.gif?raw=true

@@ -9,7 +9,7 @@ let loaded_codeshot = 1
 
 function s:Codeshot() range
   let code = join(getline(a:firstline, a:lastline), "\n")
-  let command = 'pygmentize -O full,' . s:Options() . ' -f png '. s:Filetype() .' | convert png:- -trim png:- | xclip -selection clipboard -t image/png'
+  let command = 'pygmentize -O full,' . s:Options() . ' -f png ' . s:FiletypeOption() . s:TrimPipeline() . 'xclip -selection clipboard -t image/png'
 
   echo system(command, code)
 endfunction
@@ -28,7 +28,19 @@ function s:Options()
   return 'style=' . style .',font_size=' . font_size . ',line_numbers=' . line_numbers
 endfunction
 
-function s:Filetype()
+function s:TrimPipeline()
+  let trim = get(g:, 'CodeshotTrim', 1)
+  let trim_exists = executable('convert')
+
+  if trim && trim_exists
+    return ' | convert png:- -trim png:- | '
+  endif
+
+  return ' | '
+
+endfunction
+
+function s:FiletypeOption()
   if &filetype == ''
     return ''
   endif
