@@ -18,7 +18,7 @@ function s:Silicon(first_line)
   let font = get(g:, 'CodeshotFont', 'Hack')
   let font_size = get(g:, 'CodeshotFontSize', 32)
 
-  let command = 'silicon --to-clipboard --theme ' . shellescape(style) . ' --font ' . shellescape(font . '=' . font_size)
+  let command = 'silicon --to-clipboard --no-window-controls --no-round-corner --pad-horiz 0 --pad-vert 0 --theme ' . shellescape(style) . ' --font ' . shellescape(font . '=' . font_size)
   return command . s:LineNumberOptions(a:first_line) . s:LanguageOption()
 endfunction
 
