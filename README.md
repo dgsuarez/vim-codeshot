@@ -6,10 +6,12 @@ Easily take "screenshots" of your code in vim.
 Requirements
 ------------
 
-The actual `code -> image` transformation is done with [pygments], so you need
-to have it installed.
+The actual `code -> image` transformation and the copy to the clipboard are
+done with [silicon], so you need to have it installed. It works on macOS and
+Linux:
 
-The plugin also requires `xclip`, so it's not going to work on Mac.
+-   macOS: `brew install silicon`
+-   Linux: your distro's package, or `cargo install silicon`
 
 Usage
 -----
@@ -30,14 +32,12 @@ Options
 
 You can control the appearance of the code using the following options:
 
--   `g:CodeshotStyle`: Pygments style (i.e. Color scheme). Check the [Pygments
-    demo] for a list of available styles. (default `trac`)
+-   `g:CodeshotStyle`: Silicon theme (i.e. Color scheme). Run `silicon
+    --list-themes` for a list of available themes. (default `Dracula`)
+-   `g:CodeshotFont`: Font family. (default `Hack`)
 -   `g:CodeshotFontSize`: Font size. (default `32`)
 -   `g:CodeshotShowLineNumbers`: Show line numbers. (default `0` for no line
-    numbers, `1` will show them)
--   `g:CodeshotTrim`: Run ImageMagick's `convert` to trim empty space around
-    the image. If `convert` is not available it will not run (default `1`)
+    numbers, `1` will show them, numbered as in the buffer)
 
-  [pygments]: http://pygments.org/
+  [silicon]: https://github.com/Aloxaf/silicon
   [Demo gif]: codeshot.gif?raw=true
-  [Pygments demo]: http://pygments.org/demo/
